@@ -1,0 +1,16 @@
+export const RESPONSE_MESSAGES = {
+  LOGIN_SUCCESS: 'Logged in successfully',
+  REGISTER_SUCCESS: 'Organization created — welcome to DevHub',
+  INVITE_ACCEPTED: 'Invite accepted — welcome aboard',
+  INVITES_SENT: 'Invites processed',
+  INVITE_REVOKED: 'Invite revoked',
+  LOGOUT_SUCCESS: 'Logged out successfully',
+  TOKEN_REFRESHED: 'Session refreshed',
+  INVALID_CREDENTIALS: 'Invalid email or password',
+  UNAUTHORIZED: 'You must be signed in to do that',
+  FORBIDDEN: 'You do not have permission to do that',
+  NOT_FOUND: 'The requested resource was not found',
+  VALIDATION_ERROR: 'Some fields need your attention',
+  INTERNAL_ERROR: 'Something went wrong on our end',
+  RATE_LIMITED: 'Too many requests — please slow down',
+} as const;
