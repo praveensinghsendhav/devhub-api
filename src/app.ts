@@ -7,7 +7,6 @@ import { clientOrigins, env } from './config/env.js';
 import { requestLogger } from './common/middlewares/requestLogger.js';
 import { sanitizeRequest } from './common/middlewares/sanitizeRequest.js';
 import { apiLimiter } from './common/middlewares/rateLimiter.js';
-import { requireInternalCaller } from './common/middlewares/requireInternalCaller.js';
 import { notFound } from './common/middlewares/notFound.js';
 import { errorHandler } from './common/middlewares/errorHandler.js';
 import { apiRouter } from './routes/index.js';
@@ -16,7 +15,7 @@ export function createApp() {
   const app = express();
 
   app.disable('x-powered-by');
-  // Requests arrive via the Next.js server; trust its X-Forwarded-For so rate limits are per client.
+  // Trust the host's load balancer X-Forwarded-For so rate limits are per client.
   app.set('trust proxy', env.TRUST_PROXY);
   app.use(requestLogger);
   app.use(helmet());
@@ -24,6 +23,7 @@ export function createApp() {
     cors({
       origin: clientOrigins,
       credentials: true,
+      methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     }),
   );
   app.use(express.json({ limit: '1mb' }));
@@ -36,7 +36,7 @@ export function createApp() {
     res.status(200).json({ success: true, data: { status: 'ok' } });
   });
 
-  app.use('/api', requireInternalCaller, apiRouter);
+  app.use('/api', apiRouter);
 
   app.use(notFound);
   app.use(errorHandler);

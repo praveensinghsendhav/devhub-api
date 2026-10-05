@@ -19,7 +19,9 @@ function refreshCookieOptions(maxAgeMs: number): CookieOptions {
   return {
     httpOnly: true,
     secure: isProduction,
-    sameSite: 'lax',
+    // Hosted, the web app and API are on different sites (vercel.app vs the API's host), so the
+    // browser only sends the cookie with SameSite=None (which requires Secure).
+    sameSite: isProduction ? 'none' : 'lax',
     path: '/api/auth',
     maxAge: maxAgeMs,
   };
