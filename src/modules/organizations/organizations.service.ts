@@ -9,10 +9,8 @@ import type {
   OrganizationMember,
   Role,
 } from '../../shared/index.js';
-import * as Sentry from '@sentry/node';
 import { env } from '../../config/env.js';
-import { logger } from '../../config/logger.js';
-import { appUrl, sendMail } from '../../config/mailer.js';
+import { appUrl } from '../../config/appUrl.js';
 import { OrganizationModel, type OrganizationRow } from '../../models/organization.model.js';
 import {
   OrganizationInviteModel,
@@ -22,7 +20,6 @@ import { UserModel } from '../../models/user.model.js';
 import { AppError } from '../../common/errors/AppError.js';
 import { ERROR_CODES } from '../../common/constants/errorCodes.js';
 import { HTTP_STATUS } from '../../common/constants/httpStatus.js';
-import { buildInviteEmail } from './inviteEmail.js';
 import type { CreateInvitesInput } from './organizations.validators.js';
 
 const INVITE_TOKEN_BYTES = 32;
@@ -120,7 +117,6 @@ export async function createInvites(
   input: CreateInvitesInput,
 ): Promise<CreateInvitesResponse> {
   const organizationId = requireOrganizationId(user);
-  const organization = await OrganizationModel.findByIdOrThrow(organizationId);
   const result: CreateInvitesResponse = { invited: [], skipped: [] };
 
   for (const email of input.emails) {
@@ -150,25 +146,11 @@ export async function createInvites(
       expiresAt,
     });
 
-    try {
-      await sendMail(
-        buildInviteEmail({
-          to: email,
-          organizationName: organization.name,
-          inviterName: user.name,
-          inviteUrl: appUrl(`/invite?token=${rawToken}`),
-          expiresAt,
-        }),
-      );
-    } catch (err) {
-      logger.error({ err, inviteId: row.id }, 'Failed to send invite email');
-      Sentry.captureException(err, { tags: { invite_id: row.id } });
-      await OrganizationInviteModel.revoke(row.id, organizationId);
-      result.skipped.push({ email, reason: 'The invite email could not be sent' });
-      continue;
-    }
-
-    result.invited.push(toInvite({ ...row, inviter_name: user.name }));
+    // No email is sent: the admin copies this link and shares it with the invitee themselves.
+    result.invited.push({
+      ...toInvite({ ...row, inviter_name: user.name }),
+      inviteUrl: appUrl(`/invite?token=${rawToken}`),
+    });
   }
 
   return result;
@@ -185,7 +167,7 @@ export async function revokeInvite(user: AuthUser, inviteId: string): Promise<vo
   }
 }
 
-/** Resolves a raw emailed token to its pending invite, or a single generic error for any failure. */
+/** Resolves a raw invite token to its pending invite, or a single generic error for any failure. */
 export async function findPendingInviteOrThrow(rawToken: string) {
   const invite = await OrganizationInviteModel.findPendingByTokenHash(hashInviteToken(rawToken));
   if (!invite) {

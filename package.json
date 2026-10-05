@@ -16,8 +16,7 @@
     "db:migrate": "tsx node_modules/knex/bin/cli.js migrate:latest --knexfile knexfile.ts",
     "db:rollback": "tsx node_modules/knex/bin/cli.js migrate:rollback --knexfile knexfile.ts",
     "db:seed": "tsx node_modules/knex/bin/cli.js seed:run --knexfile knexfile.ts",
-    "db:make": "tsx node_modules/knex/bin/cli.js migrate:make --knexfile knexfile.ts -x ts",
-    "mail:test": "tsx scripts/send-test-email.ts"
+    "db:make": "tsx node_modules/knex/bin/cli.js migrate:make --knexfile knexfile.ts -x ts"
   },
   "dependencies": {
     "@sentry/node": "^11.0.0",
@@ -33,7 +32,6 @@
     "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
     "knex": "^3.3.0",
-    "nodemailer": "^10.0.10",
     "pg": "^8.23.0",
     "pino": "^10.3.1",
     "rate-limit-redis": "^6.0.1",
@@ -47,7 +45,6 @@
     "@types/hpp": "^0.2.7",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.6.2",
-    "@types/nodemailer": "^8.0.2",
     "@types/pg": "^8.23.1",
     "eslint": "^10.11.0",
     "eslint-config-prettier": "^10.1.8",

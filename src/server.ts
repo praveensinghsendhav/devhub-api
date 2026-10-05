@@ -4,7 +4,6 @@ import { env } from './config/env.js';
 import { logger } from './config/logger.js';
 import { connectDatabase, disconnectDatabase } from './db/knex.js';
 import { redis } from './config/redis.js';
-import { verifyMailer } from './config/mailer.js';
 import { createApp } from './app.js';
 import { initSocketServer } from './websocket/index.js';
 
@@ -18,7 +17,6 @@ async function main(): Promise<void> {
 
   httpServer.listen(env.PORT, () => {
     logger.info(`API listening on http://${env.HOST_IP}:${env.PORT}`);
-    void verifyMailer();
   });
 
   const shutdown = async (signal: string) => {

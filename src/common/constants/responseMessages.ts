@@ -2,7 +2,7 @@ export const RESPONSE_MESSAGES = {
   LOGIN_SUCCESS: 'Logged in successfully',
   REGISTER_SUCCESS: 'Organization created — welcome to DevHub',
   INVITE_ACCEPTED: 'Invite accepted — welcome aboard',
-  INVITES_SENT: 'Invites processed',
+  INVITES_SENT: 'Invites created',
   INVITE_REVOKED: 'Invite revoked',
   LOGOUT_SUCCESS: 'Logged out successfully',
   TOKEN_REFRESHED: 'Session refreshed',

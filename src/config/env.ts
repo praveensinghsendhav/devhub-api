@@ -64,19 +64,9 @@ const envSchema = z.object({
     .default('loopback')
     // "1", "2"… mean hop counts; anything else is an address/subnet list (e.g. "loopback, 10.0.0.0/8").
     .transform((value) => (/^\d+$/.test(value) ? Number(value) : value)),
-  /** Public web URL used to build links in emails. Defaults to the first CLIENT_ORIGIN in production, else HOST_IP:WEB_PORT. */
+  /** Public web URL used to build invite links. Defaults to the first CLIENT_ORIGIN in production, else HOST_IP:WEB_PORT. */
   APP_URL: z.string().optional(),
   INVITE_TTL_HOURS: z.coerce.number().int().positive().default(72),
-  /** SMTP is optional in development: without SMTP_HOST, emails are logged instead of sent. */
-  SMTP_HOST: z.string().optional(),
-  SMTP_PORT: z.coerce.number().int().positive().default(587),
-  SMTP_SECURE: z
-    .enum(['true', 'false'])
-    .default('false')
-    .transform((value) => value === 'true'),
-  SMTP_USER: z.string().optional(),
-  SMTP_PASS: z.string().optional(),
-  MAIL_FROM: z.string().default('DevHub <no-reply@devhub.local>'),
   /** Meetings: STUN servers (comma-separated) browsers use to discover their public address. */
   STUN_URLS: z.string().default('stun:stun.l.google.com:19302,stun:stun1.l.google.com:19302'),
   /**

@@ -8,7 +8,7 @@ separate **devhub-web** repo.
 
 ```bash
 npm install
-docker compose up -d              # Postgres + Redis (+ mailpit)
+docker compose up -d              # Postgres + Redis
 cp .env.example .env              # then fill in real secrets
 npm run db:migrate
 npm run db:seed                   # creates admin@devhub.local / ChangeMe123!
@@ -63,10 +63,9 @@ between the copies: this one imports with `.js` suffixes (Node ESM), the web one
 ## Organizations & invites
 
 Register creates an organization and its owner (`ADMIN`). Invites are single-use tokens (only the
-SHA-256 is stored) that expire after `INVITE_TTL_HOURS` (default 72). Without `SMTP_HOST`, dev logs
-the email instead of sending it. For local testing: `docker compose up -d mailpit`,
-`SMTP_HOST=localhost SMTP_PORT=1025`, read mail at http://localhost:8025. Test SMTP with
-`npm run mail:test -- you@example.com`.
+SHA-256 is stored) that expire after `INVITE_TTL_HOURS` (default 72). No email is sent:
+creating invites returns an `inviteUrl` per invite, which the admin copies and shares manually.
+The link is shown only once — re-invite the same email for a fresh one (the old link stops working).
 
 ## Presence & meetings
 
@@ -98,7 +97,7 @@ start.
 | `JWT_ACCESS_SECRET`, `COOKIE_SECRET`        | new random values, not the local ones                                                      |
 | `DB_ENCRYPTION_KEY`                         | new 32-byte base64 key, kept safe                                                          |
 | `TRUST_PROXY`                               | number of proxies in front of the API, usually `1` (the host's load balancer)               |
-| `SMTP_*`, `MAIL_FROM`, `SENTRY_*`, `TURN_*` | as needed                                                                                  |
+| `SENTRY_*`, `TURN_*`                        | as needed                                                                                  |
 
 Most hosts inject `PORT`. Health check: `GET /health`. Seed once from the host's shell if you want
 the admin user: `npm run db:seed`. `HOST_IP`, `API_PORT`, `WEB_PORT` and `HTTPS` are local-only.

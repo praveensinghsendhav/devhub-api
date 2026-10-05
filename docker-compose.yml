@@ -31,14 +31,6 @@ services:
       timeout: 5s
       retries: 10
 
-  # Local SMTP catcher: point SMTP_HOST=localhost SMTP_PORT=1025 at it, read mail at http://localhost:8025
-  mailpit:
-    image: axllent/mailpit:latest
-    restart: unless-stopped
-    ports:
-      - '1025:1025'
-      - '8025:8025'
-
 volumes:
   devhub_postgres_data:
   devhub_redis_data:

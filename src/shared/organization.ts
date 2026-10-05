@@ -56,8 +56,13 @@ export interface CreateInvitesRequest {
   role: InvitableRole;
 }
 
+export interface CreatedInvite extends OrganizationInvite {
+  /** Shareable accept link. Only returned once, at creation — the server stores just the token hash. */
+  inviteUrl: string;
+}
+
 export interface CreateInvitesResponse {
-  invited: OrganizationInvite[];
+  invited: CreatedInvite[];
   /** Emails that were skipped, with a human-readable reason (already a member, already invited...). */
   skipped: { email: string; reason: string }[];
 }
