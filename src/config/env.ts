@@ -31,7 +31,9 @@ const envSchema = z.object({
   /** The web app's public origin(s), comma-separated — e.g. "https://devhub.vercel.app". */
   CLIENT_ORIGIN: z.string().default(`http://localhost:${process.env.WEB_PORT || 3000}`),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
-  REDIS_URL: z.string().min(1, 'REDIS_URL is required'),
+  /** Upstash Redis (console → REST API). The TCP connection is built from these; its password is the token. */
+  UPSTASH_REDIS_REST_URL: z.url('UPSTASH_REDIS_REST_URL is required'),
+  UPSTASH_REDIS_REST_TOKEN: z.string().min(1, 'UPSTASH_REDIS_REST_TOKEN is required'),
   JWT_ACCESS_SECRET: z.string().min(16, 'JWT_ACCESS_SECRET must be at least 16 characters'),
   JWT_ACCESS_TTL: z.string().default('15m'),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),

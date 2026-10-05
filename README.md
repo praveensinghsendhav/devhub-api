@@ -96,7 +96,7 @@ start.
 | `NODE_ENV`                                  | `production` (already set in the image)                                                    |
 | `CLIENT_ORIGIN`                             | the web app's URL, e.g. `https://<your-app>.vercel.app` (comma-separate several; required) |
 | `INTERNAL_API_SECRET`                       | `openssl rand -hex 32`, same value as in devhub-web                                        |
-| `DATABASE_URL`, `REDIS_URL`                 | from your providers (Neon/Supabase URLs need `?sslmode=require`)                           |
+| `DATABASE_URL`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | from your providers (Neon/Supabase URLs need `?sslmode=require`)                           |
 | `JWT_ACCESS_SECRET`, `COOKIE_SECRET`        | new random values, not the local ones                                                      |
 | `DB_ENCRYPTION_KEY`                         | new 32-byte base64 key, kept safe                                                          |
 | `TRUST_PROXY`                               | number of proxies in front of the API, usually `2` (Vercel + host load balancer)           |
